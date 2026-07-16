@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>askdocs</title>
+  <link rel="stylesheet" href="/web/styles.css" />
+</head>
+<body>
+  <main class="page">
+    <h1>askdocs</h1>
+
+    <section class="card" id="documents-card" aria-labelledby="documents-heading">
+      <h2 id="documents-heading">Documents</h2>
+      <form id="upload-form">
+        <label for="file-input">Upload a document (.txt, .md, .pdf)</label>
+        <input type="file" id="file-input" name="file" accept=".txt,.md,.pdf" required />
+        <button type="submit" id="upload-button">Upload</button>
+      </form>
+      <p id="upload-status" role="status" aria-live="polite"></p>
+      <p id="upload-error" role="alert" aria-live="assertive"></p>
+      <ul id="documents-list" aria-label="Indexed documents"></ul>
+      <p id="documents-empty" class="muted">No documents yet. Upload one to get started.</p>
+    </section>
+
+    <section class="card" id="ask-card" aria-labelledby="ask-heading">
+      <h2 id="ask-heading">Ask</h2>
+      <form id="ask-form">
+        <label for="question-input">Your question</label>
+        <textarea id="question-input" name="question" rows="3" required></textarea>
+        <p id="ask-validation" role="alert" aria-live="assertive"></p>
+        <button type="submit" id="ask-button">Ask</button>
+      </form>
+    </section>
+
+    <section class="card" id="answer-card" aria-labelledby="answer-heading" hidden>
+      <h2 id="answer-heading">Answer</h2>
+      <p id="answer-error" role="alert" aria-live="assertive"></p>
+      <p id="answer-text" role="status" aria-live="polite"></p>
+      <div id="citations-wrap">
+        <p class="muted">Sources</p>
+        <div id="citations" class="chips"></div>
+        <p id="citation-snippet" class="snippet" hidden></p>
+      </div>
+    </section>
+
+    <dialog id="api-key-dialog">
+      <form method="dialog" id="api-key-form">
+        <label for="api-key-input">API key required</label>
+        <input type="password" id="api-key-input" name="api-key" />
+        <button type="submit">Save</button>
+      </form>
+    </dialog>
+  </main>
+  <script src="/web/app.js"></script>
+</body>
+</html>
