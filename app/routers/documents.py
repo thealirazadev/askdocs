@@ -1,4 +1,4 @@
-"""POST /documents - upload and index a document."""
+"""POST /documents, GET /documents, DELETE /documents/{id}."""
 
 import logging
 import os
@@ -10,8 +10,13 @@ from fastapi import APIRouter, Depends, UploadFile
 
 from app.config import Settings, get_settings
 from app.deps import get_metadata_store, get_vector_store
-from app.errors import EmptyDocumentError, FileTooLargeError, UnsupportedFileTypeError
-from app.schemas.documents import UploadResult
+from app.errors import (
+    EmptyDocumentError,
+    FileTooLargeError,
+    NotFoundError,
+    UnsupportedFileTypeError,
+)
+from app.schemas.documents import DocumentListOut, DocumentOut, UploadResult
 from app.services.chunking import chunk_text
 from app.services.extraction import EXTENSION_TO_CONTENT_TYPE, extract_text
 from app.services.metadata import MetadataStore
@@ -81,3 +86,23 @@ async def upload_document(
         },
     )
     return UploadResult(id=document_id, filename=filename, num_chunks=len(chunks), status="indexed")
+
+
+@router.get("/documents", response_model=DocumentListOut)
+def list_documents(metadata_store: MetadataStore = Depends(get_metadata_store)) -> DocumentListOut:
+    rows = metadata_store.list_documents()
+    return DocumentListOut(documents=[DocumentOut(**dict(row)) for row in rows])
+
+
+@router.delete("/documents/{document_id}", status_code=204)
+def delete_document(
+    document_id: str,
+    metadata_store: MetadataStore = Depends(get_metadata_store),
+    vector_store: VectorStore = Depends(get_vector_store),
+) -> None:
+    existing = metadata_store.get_document(document_id)
+    if existing is None:
+        raise NotFoundError("No document with that id exists.")
+    vector_store.delete_document(document_id)
+    metadata_store.delete_document(document_id)
+    logger.info("document_deleted", extra={"document_id": document_id})
