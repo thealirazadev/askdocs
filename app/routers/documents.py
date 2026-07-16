@@ -39,7 +39,7 @@ def _resolve_content_type(filename: str, declared_content_type: str | None) -> s
     ext = os.path.splitext(filename)[1].lower()
     expected = EXTENSION_TO_CONTENT_TYPE.get(ext)
     if expected is None:
-        raise UnsupportedFileTypeError("Only .txt and .md files are supported.")
+        raise UnsupportedFileTypeError("Only .txt, .md, and .pdf files are supported.")
     return expected
 
 
