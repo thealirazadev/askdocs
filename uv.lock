@@ -214,6 +214,7 @@ dependencies = [
     { name = "anthropic" },
     { name = "chromadb" },
     { name = "fastapi" },
+    { name = "httpx" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "pypdf" },
@@ -224,7 +225,6 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "black" },
-    { name = "httpx" },
     { name = "pytest" },
     { name = "ruff" },
 ]
@@ -234,6 +234,7 @@ requires-dist = [
     { name = "anthropic", specifier = "==0.42.0" },
     { name = "chromadb", specifier = "==0.5.23" },
     { name = "fastapi", specifier = "==0.115.6" },
+    { name = "httpx", specifier = "==0.28.1" },
     { name = "pydantic", specifier = "==2.10.4" },
     { name = "pydantic-settings", specifier = "==2.7.0" },
     { name = "pypdf", specifier = "==5.1.0" },
@@ -244,7 +245,6 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "black", specifier = "==24.10.0" },
-    { name = "httpx", specifier = "==0.28.1" },
     { name = "pytest", specifier = "==8.3.4" },
     { name = "ruff", specifier = "==0.8.4" },
 ]
