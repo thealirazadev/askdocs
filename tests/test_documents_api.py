@@ -1,4 +1,8 @@
+from pathlib import Path
+
 from tests.conftest import upload_text_file
+
+FIXTURES = Path(__file__).parent / "fixtures"
 
 
 def test_upload_success_returns_id_and_chunk_count(client):
@@ -72,3 +76,26 @@ def test_persistence_across_fresh_store(client, tmp_data_dir):
     rows = fresh_store.list_documents()
     assert len(rows) == 1
     assert rows[0]["filename"] == "a.txt"
+
+
+def test_upload_pdf_success(client):
+    data = (FIXTURES / "sample.pdf").read_bytes()
+    resp = client.post("/documents", files={"file": ("sample.pdf", data, "application/pdf")})
+    assert resp.status_code == 201
+    body = resp.json()
+    assert body["status"] == "indexed"
+    assert body["num_chunks"] >= 1
+
+
+def test_upload_pdf_with_no_text_returns_400(client):
+    data = (FIXTURES / "empty.pdf").read_bytes()
+    resp = client.post("/documents", files={"file": ("empty.pdf", data, "application/pdf")})
+    assert resp.status_code == 400
+    assert resp.json()["error"]["code"] == "empty_document"
+
+
+def test_upload_corrupt_pdf_returns_422(client):
+    data = (FIXTURES / "corrupt.pdf").read_bytes()
+    resp = client.post("/documents", files={"file": ("corrupt.pdf", data, "application/pdf")})
+    assert resp.status_code == 422
+    assert resp.json()["error"]["code"] == "extraction_failed"
