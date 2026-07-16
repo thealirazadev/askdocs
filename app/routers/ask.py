@@ -3,14 +3,14 @@
 from fastapi import APIRouter, Depends
 
 from app.config import Settings, get_settings
-from app.deps import get_metadata_store, get_vector_store
+from app.deps import get_metadata_store, get_vector_store, require_api_key
 from app.schemas.ask import AskRequest, AskResponse, Citation
 from app.services.answering import answer_question
 from app.services.claude_client import ClaudeClient
 from app.services.metadata import MetadataStore
 from app.services.vectorstore import VectorStore
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(require_api_key)])
 
 
 def get_claude_client(settings: Settings = Depends(get_settings)) -> ClaudeClient:

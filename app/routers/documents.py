@@ -9,7 +9,7 @@ from datetime import UTC, datetime
 from fastapi import APIRouter, Depends, UploadFile
 
 from app.config import Settings, get_settings
-from app.deps import get_metadata_store, get_vector_store
+from app.deps import get_metadata_store, get_vector_store, require_api_key
 from app.errors import (
     EmptyDocumentError,
     FileTooLargeError,
@@ -22,7 +22,7 @@ from app.services.extraction import EXTENSION_TO_CONTENT_TYPE, extract_text
 from app.services.metadata import MetadataStore
 from app.services.vectorstore import VectorStore
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(require_api_key)])
 logger = logging.getLogger("askdocs.documents")
 
 _SAFE_CHARS = re.compile(r"[^A-Za-z0-9._-]")
