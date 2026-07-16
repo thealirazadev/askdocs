@@ -5,13 +5,26 @@ description = "Local-first document question-answering service with cited answer
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
-dependencies = []
+dependencies = [
+    "fastapi==0.115.6",
+    "uvicorn==0.34.0",
+    "pydantic==2.10.4",
+    "pydantic-settings==2.7.0",
+    "python-multipart==0.0.20",
+    "chromadb==0.5.23",
+    "anthropic==0.42.0",
+]
 
 [tool.uv]
 package = false
 
 [dependency-groups]
-dev = []
+dev = [
+    "pytest==8.3.4",
+    "ruff==0.8.4",
+    "black==24.10.0",
+    "httpx==0.28.1",
+]
 
 [tool.ruff]
 line-length = 100
@@ -19,6 +32,8 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+# B008: FastAPI's Depends(...)-as-default-argument is the standard DI pattern, not a bug.
+ignore = ["B008"]
 
 [tool.black]
 line-length = 100
