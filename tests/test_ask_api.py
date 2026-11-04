@@ -43,3 +43,16 @@ def test_ask_model_api_error_returns_502(client, mock_claude):
     resp = client.post("/ask", json={"question": "What does the handbook say?"})
     assert resp.status_code == 502
     assert resp.json()["error"]["code"] == "model_api_error"
+
+
+def test_ask_validation_error_does_not_log_question(client, caplog):
+    secret_question = "confidential-question-text " * 100
+
+    with caplog.at_level("INFO", logger="askdocs"):
+        resp = client.post("/ask", json={"question": secret_question})
+
+    assert resp.status_code == 422
+    records = [r for r in caplog.records if r.getMessage() == "validation_error"]
+    assert records
+    for record in records:
+        assert "confidential-question-text" not in str(record.__dict__)

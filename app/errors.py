@@ -103,7 +103,12 @@ def register_exception_handlers(app: FastAPI) -> None:
     async def handle_validation_error(
         request: Request, exc: RequestValidationError
     ) -> JSONResponse:
-        logger.info("validation_error", extra={"route": request.url.path, "errors": exc.errors()})
+        # Drop "input" (and "ctx"): it echoes the request body, e.g. the question text.
+        errors = [
+            {"loc": err.get("loc"), "type": err.get("type"), "msg": err.get("msg")}
+            for err in exc.errors()
+        ]
+        logger.info("validation_error", extra={"route": request.url.path, "errors": errors})
         return _error_response(
             status.HTTP_422_UNPROCESSABLE_ENTITY, "validation_error", "The request body is invalid."
         )
