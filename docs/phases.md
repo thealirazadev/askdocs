@@ -23,18 +23,18 @@ The smallest useful product: upload `.txt`/`.md`, ask a question, get an answer 
 - `ruff check .`, `black --check .`, and `pytest` all pass. The Claude API is mocked in tests.
 
 ### Manual test checklist
-- [ ] Start the server; `curl /health` returns `{"status":"ok"}`.
-- [ ] Upload a small `.md` file; confirm `201` and a plausible `num_chunks`.
-- [ ] `GET /documents` shows the uploaded document.
-- [ ] Ask a question answerable from the file; confirm the answer is grounded and citations reference the uploaded file and real chunk indices.
-- [ ] Ask something not in the file; confirm the answer says it is not found and citations are empty or minimal (no fabrication).
-- [ ] Upload a `.png`; confirm `415 unsupported_file_type`.
-- [ ] Upload a file larger than `MAX_UPLOAD_MB`; confirm `413 file_too_large`.
-- [ ] `POST /ask` with `{"question": ""}`; confirm `422 validation_error`.
-- [ ] `POST /ask` on an empty store; confirm the friendly `200` answer with empty citations.
-- [ ] Delete the document; confirm `204`, then `GET /documents` is empty and `DELETE` again returns `404`.
-- [ ] Restart the server; confirm previously indexed data is still listed (upload one before restarting to verify).
-- [ ] Inspect logs: JSON lines with request ids; no document text or API key present.
+- [x] Start the server; `curl /health` returns `{"status":"ok"}`.
+- [x] Upload a small `.md` file; confirm `201` and a plausible `num_chunks`.
+- [x] `GET /documents` shows the uploaded document.
+- [x] Ask a question answerable from the file; confirm the answer is grounded and citations reference the uploaded file and real chunk indices.
+- [x] Ask something not in the file; confirm the answer says it is not found and citations are empty or minimal (no fabrication).
+- [x] Upload a `.png`; confirm `415 unsupported_file_type`.
+- [x] Upload a file larger than `MAX_UPLOAD_MB`; confirm `413 file_too_large`.
+- [x] `POST /ask` with `{"question": ""}`; confirm `422 validation_error`.
+- [x] `POST /ask` on an empty store; confirm the friendly `200` answer with empty citations.
+- [x] Delete the document; confirm `204`, then `GET /documents` is empty and `DELETE` again returns `404`.
+- [x] Restart the server; confirm previously indexed data is still listed (upload one before restarting to verify).
+- [x] Inspect logs: JSON lines with request ids; no document text or API key present.
 
 ### Commits
 1. `build: scaffold project with pyproject, uv.lock, ruff and black config`
@@ -69,10 +69,10 @@ Add PDF extraction to the existing upload pipeline.
 - Lint, format, and tests pass.
 
 ### Manual test checklist
-- [ ] Upload a normal text PDF; confirm `201` and sensible `num_chunks`.
-- [ ] Ask a question answerable from the PDF; confirm grounded answer and citations.
-- [ ] Upload an image-only/scanned PDF; confirm `400 empty_document`.
-- [ ] Upload a truncated/corrupt PDF; confirm `422 extraction_failed`.
+- [x] Upload a normal text PDF; confirm `201` and sensible `num_chunks`.
+- [x] Ask a question answerable from the PDF; confirm grounded answer and citations.
+- [x] Upload an image-only/scanned PDF; confirm `400 empty_document`.
+- [x] Upload a truncated/corrupt PDF; confirm `422 extraction_failed`.
 
 ### Commits
 1. `build: add pypdf dependency`
@@ -94,12 +94,12 @@ Gate data routes behind `X-API-Key` when `API_KEY` is configured.
 - Lint, format, and tests pass.
 
 ### Manual test checklist
-- [ ] With `API_KEY` unset, all endpoints work with no header.
-- [ ] Set `API_KEY`; requests without `X-API-Key` return `401`.
-- [ ] Requests with a wrong key return `401`.
-- [ ] Requests with the correct key succeed.
-- [ ] `GET /health` works without a key even when `API_KEY` is set.
-- [ ] Confirm the key does not appear in logs.
+- [x] With `API_KEY` unset, all endpoints work with no header.
+- [x] Set `API_KEY`; requests without `X-API-Key` return `401`.
+- [x] Requests with a wrong key return `401`.
+- [x] Requests with the correct key succeed.
+- [x] `GET /health` works without a key even when `API_KEY` is set.
+- [x] Confirm the key does not appear in logs.
 
 ### Commits
 1. `feat(auth): add optional api-key dependency for data routes`
@@ -120,16 +120,16 @@ A single static page served by the app: upload, ask, and view answers with citat
 - No external CDN assets or web fonts.
 
 ### Manual test checklist
-- [ ] Load `/`; upload a file via the form; see it appear in the list.
-- [ ] Ask a question; see the loading state, then the answer and citation chips.
-- [ ] Activate a citation chip with mouse and with keyboard; see the snippet.
-- [ ] Delete a document from the list; confirm it disappears.
-- [ ] Trigger an error (unsupported file); see the inline error with `role="alert"`.
-- [ ] Ask with an empty question; see inline validation, no request sent.
-- [ ] Ask on an empty corpus; see the friendly answer, not an error style.
-- [ ] Tab through the page; focus is always visible and order is logical.
-- [ ] Toggle OS dark mode; confirm both themes are legible and pass contrast.
-- [ ] Check at 375px width and 200% zoom; no horizontal body scroll.
+- [x] Load `/`; upload a file via the form; see it appear in the list.
+- [x] Ask a question; see the loading state, then the answer and citation chips.
+- [x] Activate a citation chip with mouse and with keyboard; see the snippet.
+- [x] Delete a document from the list; confirm it disappears.
+- [x] Trigger an error (unsupported file); see the inline error with `role="alert"`.
+- [x] Ask with an empty question; see inline validation, no request sent.
+- [x] Ask on an empty corpus; see the friendly answer, not an error style.
+- [x] Tab through the page; focus is always visible and order is logical.
+- [x] Toggle OS dark mode; confirm both themes are legible and pass contrast.
+- [x] Check at 375px width and 200% zoom; no horizontal body scroll.
 
 ### Commits
 1. `feat(web): add static single-page ui shell and styles`
@@ -155,11 +155,11 @@ A small CLI client over HTTP: `add`, `list`, `delete`, `ask`.
 - Lint, format, and tests pass.
 
 ### Manual test checklist
-- [ ] `add` a file; confirm printed id and chunk count, and that it appears in `list`.
-- [ ] `ask` a question; confirm answer and citations print readably.
-- [ ] `delete` the id; confirm it is gone from `list`.
-- [ ] Point at a down server; confirm a friendly error and non-zero exit.
-- [ ] With auth enabled, confirm `--api-key`/`ASKDOCS_API_KEY` is required and used.
+- [x] `add` a file; confirm printed id and chunk count, and that it appears in `list`.
+- [x] `ask` a question; confirm answer and citations print readably.
+- [x] `delete` the id; confirm it is gone from `list`.
+- [x] Point at a down server; confirm a friendly error and non-zero exit.
+- [x] With auth enabled, confirm `--api-key`/`ASKDOCS_API_KEY` is required and used.
 
 ### Commits
 1. `build: add httpx dependency for cli`
@@ -170,22 +170,22 @@ A small CLI client over HTTP: `add`, `list`, `delete`, `ask`.
 
 ## Phase verification (run after every phase)
 
-- [ ] Run the API (`uv run uvicorn app.main:app`) and confirm it starts without errors.
-- [ ] Run the full test suite (`uv run pytest`); all pass with the Claude API mocked.
-- [ ] Run `uv run ruff check .` and `uv run black --check .`; both clean.
-- [ ] Check logs during a manual run: structured JSON, request ids present, no document text or secrets.
-- [ ] Unhappy paths:
-  - [ ] Unsupported file type -> `415 unsupported_file_type`.
-  - [ ] Oversized file -> `413 file_too_large`.
-  - [ ] Empty question -> `422 validation_error`.
-  - [ ] Question with no documents indexed -> friendly `200`, empty citations.
-  - [ ] Missing API key when auth enabled -> `401 unauthorized`.
-  - [ ] Claude API unreachable / network down (simulate) -> `502 model_api_error`, friendly message, detail logged.
-  - [ ] Very long question (> 2000 chars) -> `422 validation_error`.
-- [ ] Empty states:
-  - [ ] `GET /documents` on empty store -> `{"documents": []}`.
-  - [ ] Web UI (if built) shows the empty-documents message.
-- [ ] Persistence: restart the process; previously indexed documents and answers are still available.
+- [x] Run the API (`uv run uvicorn app.main:app`) and confirm it starts without errors.
+- [x] Run the full test suite (`uv run pytest`); all pass with the Claude API mocked.
+- [x] Run `uv run ruff check .` and `uv run black --check .`; both clean.
+- [x] Check logs during a manual run: structured JSON, request ids present, no document text or secrets.
+- [x] Unhappy paths:
+  - [x] Unsupported file type -> `415 unsupported_file_type`.
+  - [x] Oversized file -> `413 file_too_large`.
+  - [x] Empty question -> `422 validation_error`.
+  - [x] Question with no documents indexed -> friendly `200`, empty citations.
+  - [x] Missing API key when auth enabled -> `401 unauthorized`.
+  - [x] Claude API unreachable / network down (simulate) -> `502 model_api_error`, friendly message, detail logged.
+  - [x] Very long question (> 2000 chars) -> `422 validation_error`.
+- [x] Empty states:
+  - [x] `GET /documents` on empty store -> `{"documents": []}`.
+  - [x] Web UI (if built) shows the empty-documents message.
+- [x] Persistence: restart the process; previously indexed documents and answers are still available.
 
 ## Backlog
 
