@@ -82,7 +82,7 @@ Running log of what is done, what is in flight, and decisions made. Keep entries
   rule that it lives in config is unchanged.
 - Also verified: corrupt PDF 422, API_KEY on/off/wrong/right with `/health` open and the key
   absent from logs, CLI add/list/ask with `ASKDOCS_API_KEY` and `--api-key` (and exit 1
-  without a key). Not yet run: the web UI checks, CLI delete and down-server checks.
+  without a key). CLI delete and down-server (friendly error, exit 1) also pass. Not yet run: the web UI checks.
 - Fixed: citations were every retrieved passage, so "how many days to submit receipts" cited
   an unrelated PDF. The model now ends with `SOURCES: n, m` (or `none`); citations are
   filtered to those, and a missing or out-of-range line keeps all passages as before.

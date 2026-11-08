@@ -157,8 +157,8 @@ A small CLI client over HTTP: `add`, `list`, `delete`, `ask`.
 ### Manual test checklist
 - [x] `add` a file; confirm printed id and chunk count, and that it appears in `list`.
 - [x] `ask` a question; confirm answer and citations print readably.
-- [ ] `delete` the id; confirm it is gone from `list`.
-- [ ] Point at a down server; confirm a friendly error and non-zero exit.
+- [x] `delete` the id; confirm it is gone from `list`.
+- [x] Point at a down server; confirm a friendly error and non-zero exit.
 - [x] With auth enabled, confirm `--api-key`/`ASKDOCS_API_KEY` is required and used.
 
 ### Commits
