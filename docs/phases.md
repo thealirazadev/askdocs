@@ -120,16 +120,16 @@ A single static page served by the app: upload, ask, and view answers with citat
 - No external CDN assets or web fonts.
 
 ### Manual test checklist
-- [x] Load `/`; upload a file via the form; see it appear in the list.
-- [x] Ask a question; see the loading state, then the answer and citation chips.
-- [x] Activate a citation chip with mouse and with keyboard; see the snippet.
-- [x] Delete a document from the list; confirm it disappears.
-- [x] Trigger an error (unsupported file); see the inline error with `role="alert"`.
-- [x] Ask with an empty question; see inline validation, no request sent.
-- [x] Ask on an empty corpus; see the friendly answer, not an error style.
-- [x] Tab through the page; focus is always visible and order is logical.
-- [x] Toggle OS dark mode; confirm both themes are legible and pass contrast.
-- [x] Check at 375px width and 200% zoom; no horizontal body scroll.
+- [ ] Load `/`; upload a file via the form; see it appear in the list.
+- [ ] Ask a question; see the loading state, then the answer and citation chips.
+- [ ] Activate a citation chip with mouse and with keyboard; see the snippet.
+- [ ] Delete a document from the list; confirm it disappears.
+- [ ] Trigger an error (unsupported file); see the inline error with `role="alert"`.
+- [ ] Ask with an empty question; see inline validation, no request sent.
+- [ ] Ask on an empty corpus; see the friendly answer, not an error style.
+- [ ] Tab through the page; focus is always visible and order is logical.
+- [ ] Toggle OS dark mode; confirm both themes are legible and pass contrast.
+- [ ] Check at 375px width and 200% zoom; no horizontal body scroll.
 
 ### Commits
 1. `feat(web): add static single-page ui shell and styles`
@@ -157,8 +157,8 @@ A small CLI client over HTTP: `add`, `list`, `delete`, `ask`.
 ### Manual test checklist
 - [x] `add` a file; confirm printed id and chunk count, and that it appears in `list`.
 - [x] `ask` a question; confirm answer and citations print readably.
-- [x] `delete` the id; confirm it is gone from `list`.
-- [x] Point at a down server; confirm a friendly error and non-zero exit.
+- [ ] `delete` the id; confirm it is gone from `list`.
+- [ ] Point at a down server; confirm a friendly error and non-zero exit.
 - [x] With auth enabled, confirm `--api-key`/`ASKDOCS_API_KEY` is required and used.
 
 ### Commits
@@ -170,22 +170,22 @@ A small CLI client over HTTP: `add`, `list`, `delete`, `ask`.
 
 ## Phase verification (run after every phase)
 
-- [x] Run the API (`uv run uvicorn app.main:app`) and confirm it starts without errors.
-- [x] Run the full test suite (`uv run pytest`); all pass with the Claude API mocked.
-- [x] Run `uv run ruff check .` and `uv run black --check .`; both clean.
-- [x] Check logs during a manual run: structured JSON, request ids present, no document text or secrets.
-- [x] Unhappy paths:
-  - [x] Unsupported file type -> `415 unsupported_file_type`.
-  - [x] Oversized file -> `413 file_too_large`.
-  - [x] Empty question -> `422 validation_error`.
-  - [x] Question with no documents indexed -> friendly `200`, empty citations.
-  - [x] Missing API key when auth enabled -> `401 unauthorized`.
-  - [x] Claude API unreachable / network down (simulate) -> `502 model_api_error`, friendly message, detail logged.
-  - [x] Very long question (> 2000 chars) -> `422 validation_error`.
-- [x] Empty states:
-  - [x] `GET /documents` on empty store -> `{"documents": []}`.
-  - [x] Web UI (if built) shows the empty-documents message.
-- [x] Persistence: restart the process; previously indexed documents and answers are still available.
+- [ ] Run the API (`uv run uvicorn app.main:app`) and confirm it starts without errors.
+- [ ] Run the full test suite (`uv run pytest`); all pass with the Claude API mocked.
+- [ ] Run `uv run ruff check .` and `uv run black --check .`; both clean.
+- [ ] Check logs during a manual run: structured JSON, request ids present, no document text or secrets.
+- [ ] Unhappy paths:
+  - [ ] Unsupported file type -> `415 unsupported_file_type`.
+  - [ ] Oversized file -> `413 file_too_large`.
+  - [ ] Empty question -> `422 validation_error`.
+  - [ ] Question with no documents indexed -> friendly `200`, empty citations.
+  - [ ] Missing API key when auth enabled -> `401 unauthorized`.
+  - [ ] Claude API unreachable / network down (simulate) -> `502 model_api_error`, friendly message, detail logged.
+  - [ ] Very long question (> 2000 chars) -> `422 validation_error`.
+- [ ] Empty states:
+  - [ ] `GET /documents` on empty store -> `{"documents": []}`.
+  - [ ] Web UI (if built) shows the empty-documents message.
+- [ ] Persistence: restart the process; previously indexed documents and answers are still available.
 
 ## Backlog
 
