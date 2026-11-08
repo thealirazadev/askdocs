@@ -10,7 +10,7 @@ class Settings(BaseSettings):
 
     anthropic_api_key: str = ""
     data_dir: str = "./data"
-    claude_model: str = "claude-opus-4-8"
+    claude_model: str = "claude-opus-5-5"
     embedding_model: str = ""
     api_key: str = ""
     max_upload_mb: int = 10

@@ -91,7 +91,7 @@ askdocs/
 - **Local embedding model (`all-MiniLM-L6-v2` via Chroma's default embedding function)** - the Anthropic API does not provide an embeddings endpoint, so embeddings are produced locally. The Chroma default embedding function downloads and runs `all-MiniLM-L6-v2` through ONNX Runtime, keeping the default install to one required external dependency (the Claude API) and no second API key. See "Embedding approach" below.
 - **SQLite via stdlib `sqlite3`** - durable document-level metadata (filename, size, status, counts, timestamps) with zero extra dependencies. Chroma is not a good source of truth for document-level listing/status, so metadata lives here.
 - **`pypdf`** - pure-Python PDF text extraction, no system libraries required.
-- **Anthropic Claude API (`anthropic` SDK)** - composes the final answer from retrieved chunks and produces citations. Model id: `claude-opus-4-8` (configurable via `CLAUDE_MODEL`; `claude-sonnet-5` or `claude-haiku-4-5` are lower-cost alternatives). Uses a single non-streaming `messages.create` call per question.
+- **Anthropic Claude API (`anthropic` SDK)** - composes the final answer from retrieved chunks and produces citations. Model id: `claude-opus-5-5` (configurable via `CLAUDE_MODEL`; `claude-sonnet-5-5` or `claude-haiku-5-5` are lower-cost alternatives). Uses a single non-streaming `messages.create` call per question.
 - **pytest / Ruff / Black** - tests, lint, format.
 
 ## Data model
@@ -157,7 +157,7 @@ Environment variables (see `.env.example`):
 |---------------------|----------|------------------|-------------------------------------------------------------------------|
 | `ANTHROPIC_API_KEY` | yes      | -                | Authenticates calls to the Claude API.                                  |
 | `DATA_DIR`          | no       | `./data`         | Root directory for the Chroma store and SQLite database.                |
-| `CLAUDE_MODEL`      | no       | `claude-opus-4-8`| Claude model id used for answer composition.                            |
+| `CLAUDE_MODEL`      | no       | `claude-opus-5-5`| Claude model id used for answer composition.                            |
 | `EMBEDDING_MODEL`   | no       | (Chroma default) | Optional sentence-transformers model id to override local embeddings.   |
 | `API_KEY`           | no       | (unset)          | If set, data routes require this value in the `X-API-Key` header.        |
 | `MAX_UPLOAD_MB`     | no       | `10`             | Maximum accepted upload size in megabytes (server-side enforced).       |
