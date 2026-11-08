@@ -16,7 +16,12 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
 
-_RESERVED = set(logging.LogRecord("", 0, "", 0, "", (), None).__dict__) | {"message", "asctime"}
+# color_message: uvicorn's ANSI-coloured copy of the message, noise in JSON logs.
+_RESERVED = set(logging.LogRecord("", 0, "", 0, "", (), None).__dict__) | {
+    "message",
+    "asctime",
+    "color_message",
+}
 
 
 class JsonFormatter(logging.Formatter):
@@ -42,6 +47,16 @@ def configure_logging(level: str = "INFO") -> None:
     handler.setFormatter(JsonFormatter())
     root.addHandler(handler)
     root.setLevel(level.upper())
+    # uvicorn installs its own plain-text handlers; send its messages through the JSON
+    # handler instead. Its access log duplicates RequestIdMiddleware's request_handled line.
+    for name in ("uvicorn", "uvicorn.error"):
+        uvicorn_logger = logging.getLogger(name)
+        uvicorn_logger.handlers.clear()
+        uvicorn_logger.propagate = True
+    access = logging.getLogger("uvicorn.access")
+    access.handlers.clear()
+    access.propagate = False
+    access.disabled = True
 
 
 class RequestIdMiddleware(BaseHTTPMiddleware):
