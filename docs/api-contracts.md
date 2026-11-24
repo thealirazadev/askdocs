@@ -16,7 +16,7 @@ Protected routes (require `X-API-Key` when `API_KEY` is set):
 
 Open routes (never require a key):
 - `GET /health`
-- Static web assets under `/` (Phase 4)
+- The web UI at `/` and its static assets under `/web`
 
 ## Error format
 

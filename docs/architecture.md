@@ -28,9 +28,9 @@ askdocs is a single FastAPI process. HTTP requests hit thin routers that delegat
                  200 {answer, citations[]}
 ```
 
-The pipeline is synchronous within a request. Ingestion for a single reasonably sized document completes inside one HTTP request; there is no background worker or job queue in scope (see Non-goals in `docs/PRD.md`).
+The pipeline is synchronous within a request. Ingestion for a single reasonably sized document completes inside one HTTP request; there is no background worker or job queue (see `docs/decisions.md`).
 
-## Proposed folder / file tree
+## File tree
 
 ```
 askdocs/
@@ -62,11 +62,11 @@ askdocs/
 │   │   └── errors.py           # ErrorBody, ErrorResponse
 │   └── migrations/
 │       └── 001_init.sql        # initial SQLite schema
-├── web/                        # optional; Phase 4
+├── web/                        # optional static UI
 │   ├── index.html
 │   ├── app.js
 │   └── styles.css
-├── cli/                        # optional; Phase 5
+├── cli/                        # optional HTTP client
 │   ├── __init__.py
 │   └── askdocs_cli.py          # add / list / delete / ask over HTTP
 ├── tests/
@@ -75,7 +75,13 @@ askdocs/
 │   ├── test_chunking.py
 │   ├── test_documents_api.py
 │   ├── test_ask_api.py
-│   └── test_auth.py
+│   ├── test_auth.py
+│   ├── test_claude_client.py
+│   ├── test_cli.py
+│   ├── test_cli_main.py
+│   ├── test_logging_setup.py
+│   └── fixtures/               # sample, empty, and corrupt PDFs
+├── docs/                       # architecture, decisions, API contracts, UI design, testing
 ├── .env.example
 ├── .gitignore
 ├── pyproject.toml
@@ -143,7 +149,7 @@ Nothing is stored outside `DATA_DIR` except transient in-request buffers. `DATA_
 - Default: local embeddings. The vector store uses Chroma's default embedding function (`all-MiniLM-L6-v2`, ONNX Runtime, 384 dimensions, cosine distance). No embedding API key is required and no document text leaves the machine for embedding.
 - Override: `EMBEDDING_MODEL` may name a different `sentence-transformers` model; when set, the embeddings service constructs a sentence-transformers embedding function for that model (requires the optional `sentence-transformers` dependency).
 - Using a hosted embeddings provider (for example Voyage AI, Anthropic's recommended embeddings partner) is explicitly out of scope for the default build; it is recorded in the backlog, not implemented. Anthropic's own API has no embeddings endpoint, so embeddings are never obtained from the Claude API.
-- The embedding function is chosen once at startup. Changing `EMBEDDING_MODEL` after documents are indexed makes existing vectors incomparable to new queries; treat it as requiring a re-index (documented in `docs/rules.md`).
+- The embedding function is chosen once at startup. Changing `EMBEDDING_MODEL` after documents are indexed makes existing vectors incomparable to new queries; treat it as requiring a re-index.
 
 ## External dependencies and required environment variables
 
