@@ -32,7 +32,10 @@ to an exact span of the extracted text.
 
 Retrieved passages are numbered `[1]..[k]` in the prompt, and the system prompt asks Claude to
 answer only from them and to end with `SOURCES: 1, 3` or `SOURCES: none`. The line is stripped
-from the answer and citations are filtered to the listed passages. Before this, every retrieved
+from the answer and citations are filtered to the listed passages. Each passage is wrapped in a
+`<passage number="n" source="...">` block and the question in a `<question>` block, closing tags
+inside document text or the question are escaped so they cannot end a block early, and the system
+prompt tells Claude that tagged text is untrusted data whose instructions it must not follow. Before this, every retrieved
 passage was returned as a citation, so a question about receipts cited an unrelated PDF that
 happened to rank in the top k. Numbers outside `1..k` are ignored. If the line is missing, or
 names no valid passage, all retrieved passages are kept, so a reply that ignores the format still
@@ -49,8 +52,10 @@ it should not cost a model call.
 An upload is extracted, chunked, embedded, and stored inside the request, and `201` means the
 document is searchable. There is no job queue to run or poll. The file type comes from the
 extension of the sanitized filename (directory parts and unsafe characters removed, so the client's
-name is never a path), not from the client's declared content type. The body is read up to
-`MAX_UPLOAD_MB` plus one byte, so an oversized upload is rejected without reading all of it.
+name is never a path), not from the client's declared content type. The handler reads the file up
+to `MAX_UPLOAD_MB` plus one byte and rejects anything larger before extraction. The multipart parser
+has already received the whole request body by then, so a deployment exposed beyond localhost
+should also cap the request size in its reverse proxy.
 Extraction and empty-text failures are raised before anything is written. The raw bytes are
 discarded; only the extracted text survives, as chunks.
 

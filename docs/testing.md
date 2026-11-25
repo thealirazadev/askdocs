@@ -16,6 +16,8 @@
 - `tests/test_chunking.py`: chunk sizes, overlap boundaries, short input (single chunk), and that `char_start`/`char_end` are correct and contiguous with overlap.
 - `tests/test_documents_api.py`: upload success, unsupported type (`415`), oversized (`413`), empty document (`400`), PDF upload, empty and corrupt PDFs, list, delete (`204`), delete unknown (`404`), and persistence across a fresh store pointed at the same dir.
 - `tests/test_ask_api.py`: answer plus citations referencing real chunks, empty question (`422`), over-long question (`422`), empty-corpus friendly `200`, model API error mapping (`502`), and citation filtering by the `SOURCES:` line.
+- `tests/test_answering.py`: passages and the question fenced in tags, closing tags inside them escaped, and the untrusted-content instruction in the system prompt.
+- `tests/test_embeddings.py`: a sentence-transformers model is loaded with normalized vectors, and a model that cannot load raises `embedding_failed`.
 - `tests/test_auth.py`: open when `API_KEY` is unset, allowed with the correct key, `401` with a missing or wrong key, health open regardless.
 - `tests/test_claude_client.py`: the Anthropic wrapper's request shape and error mapping.
 - `tests/test_cli.py`, `tests/test_cli_main.py`: argument parsing, request building against a mocked HTTP layer, the API key header, and friendly exits on errors.
