@@ -35,6 +35,9 @@ flowchart LR
   prompt, and Claude is told to answer only from them and to finish with `SOURCES: 1, 3` or
   `SOURCES: none`. askdocs strips that line and returns citations only for the passages it names.
   If the line is missing or names no valid passage, every retrieved passage is returned instead.
+- **Document text is treated as data.** Each passage and the question are fenced in tags, closing
+  tags inside them are escaped, and the system prompt tells Claude not to follow instructions found
+  inside them. This lowers the risk of a document steering the answer; it is not a guarantee.
 - **When nothing answers the question.** With no documents indexed, `/ask` returns `200`, a fixed
   message, and no citations, without calling Claude. With documents indexed, the top-k passages are
   always sent (there is no similarity cutoff), and the prompt tells Claude to say the documents do
@@ -103,7 +106,7 @@ Read from the environment or `.env` (see `app/config.py` and `.env.example`).
 | `CLAUDE_MODEL` | `claude-opus-5-5` | Model used to compose answers. |
 | `EMBEDDING_MODEL` | (empty) | sentence-transformers model to use instead of the bundled MiniLM. Requires the `sentence-transformers` package. |
 | `API_KEY` | (empty) | When set, data routes require a matching `X-API-Key` header. |
-| `MAX_UPLOAD_MB` | `10` | Upload size limit, enforced while the body is read. |
+| `MAX_UPLOAD_MB` | `10` | Upload size limit, checked before extraction. Cap request size in a reverse proxy too if the service is exposed. |
 | `TOP_K` | `5` | Passages retrieved per question when the request does not set `top_k`. |
 | `LOG_LEVEL` | `INFO` | Level for the JSON logger. |
 
