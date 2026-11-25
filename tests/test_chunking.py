@@ -28,3 +28,12 @@ def test_chunk_indices_are_sequential():
     text = "word " * 1000
     chunks = chunk_text(text)
     assert [c.index for c in chunks] == list(range(len(chunks)))
+
+
+def test_whitespace_only_windows_are_skipped_without_gaps_in_indices():
+    text = "a" * 10 + " " * 30 + "b" * 10
+    chunks = chunk_text(text, chunk_size=10, overlap=0)
+    assert [c.text for c in chunks] == ["a" * 10, "b" * 10]
+    assert [c.index for c in chunks] == [0, 1]
+    assert (chunks[1].char_start, chunks[1].char_end) == (40, 50)
+    assert all(text[c.char_start : c.char_end] == c.text for c in chunks)
