@@ -56,7 +56,7 @@ def test_citations_are_only_the_passages_the_answer_used(client, mock_claude):
     _two_documents(client)
 
     def answer(system, user):
-        number = re.search(r"\[(\d+)\] \(from refunds\.md", user).group(1)
+        number = re.search(r'<passage number="(\d+)" source="refunds\.md"', user).group(1)
         return f"Refunds are available within 30 days.\nSOURCES: {number}"
 
     mock_claude.complete.side_effect = answer
