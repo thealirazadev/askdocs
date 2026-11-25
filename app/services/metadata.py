@@ -2,7 +2,7 @@
 
 SQLite is the source of truth for document listing and status. A single connection is shared
 across requests, guarded by a lock, since this is a single-process local service (see
-docs/rules.md: "per-request connection or a locked shared connection - pick one").
+docs/decisions.md).
 """
 
 import sqlite3

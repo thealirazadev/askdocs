@@ -1,6 +1,6 @@
 # askdocs - Design
 
-Covers the minimal single-page web UI (Phase 4) and the API response design. The UI is deliberately small: one page with three regions - documents, ask, and answer. No framework; plain HTML + CSS + a single `app.js`. It is served as static files from `web/` by the FastAPI app.
+Covers the minimal single-page web UI and the API response design. The UI is deliberately small: one page with three regions - documents, ask, and answer. No framework; plain HTML + CSS + a single `app.js`. It is served as static files from `web/` by the FastAPI app.
 
 ## Design goals
 

@@ -2,8 +2,8 @@
 
 Store instances are cached by data_dir (and, for the vector store, embedding_model) rather than
 via functools.lru_cache on a zero-arg call, so that the FastAPI dependency-override mechanism
-used in tests (overriding get_settings) is honored - each distinct data_dir gets its own
-singleton. This is the "initialized store singleton" global state permitted by docs/rules.md.
+used in tests (overriding get_settings) is honored: each distinct data_dir gets its own
+singleton. These caches are the only module-level mutable state (see docs/decisions.md).
 """
 
 import hmac
